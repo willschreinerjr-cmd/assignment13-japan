@@ -435,6 +435,24 @@
   }
   .section-banner.jump-flash { animation: sectionPop 1.6s ease-out; }
 
+  /* ── Presentation focus mode (activated by speaker script) ── */
+  body.pres-mode .section,
+  body.pres-mode .hero { display: none; }
+  body.pres-mode .section.focus {
+    display: block;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: focusFade 0.4s ease-out;
+  }
+  body.pres-mode .hero.focus {
+    display: block;
+    animation: focusFade 0.4s ease-out;
+  }
+  @keyframes focusFade {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+
   /* ── Mobile hamburger toggle ── */
   .nav-toggle {
     display: none;
@@ -977,9 +995,17 @@
   // Accept scroll commands from the speaker script window
   window.addEventListener('message', e => {
     if (e.data && e.data.scrollTo) {
-      const target = document.getElementById(e.data.scrollTo);
+      const targetId = e.data.scrollTo;
+      // Enter focus/presentation mode
+      document.body.classList.add('pres-mode');
+      // Remove focus from everything
+      document.querySelectorAll('.section, .hero').forEach(el => el.classList.remove('focus'));
+      // Show only the target
+      const target = document.getElementById(targetId);
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.classList.add('focus');
+        window.scrollTo({ top: 0 });
+        // Flash the section banner
         const banner = target.querySelector('.section-banner');
         if (banner) {
           banner.classList.remove('jump-flash');

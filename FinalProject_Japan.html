@@ -426,10 +426,67 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+  /* ── Mobile hamburger toggle ── */
+  .nav-toggle {
+    display: none;
+    position: fixed;
+    top: 14px; left: 14px;
+    z-index: 300;
+    background: var(--red);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    padding: 9px 13px;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 150;
+  }
+  .nav-overlay.open { display: block; }
+
+  /* ── Cross-page links in sidebar ── */
+  .nav-pages {
+    padding: 10px 16px 14px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .nav-pages a {
+    display: block;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    font-size: 0.7rem;
+    padding: 5px 4px;
+    transition: color 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .nav-pages a:hover { color: rgba(255,255,255,0.85); }
+
+  @media (max-width: 800px) {
+    nav { transform: translateX(-100%); transition: transform 0.28s ease; z-index: 200; }
+    nav.open { transform: translateX(0); }
+    .nav-toggle { display: flex; align-items: center; justify-content: center; }
+    main { margin-left: 0; padding: 0 20px 80px; }
+    .hero { margin: 0 -20px 36px; padding: 50px 22px 36px; }
+    .hero h1 { font-size: 2.2rem; }
+    .profile-grid, .compare-grid { grid-template-columns: 1fr; }
+    .progress-bar { left: 0; }
+  }
 </style>
 </head>
 <body>
 
+<button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+<div class="nav-overlay" id="navOverlay"></div>
 <div class="progress-bar" id="progress"></div>
 
 <!-- ── Sidebar ── -->
@@ -456,6 +513,10 @@
     <li><a href="#q10"><span class="nav-num">10</span> Historical Phase</a></li>
     <li><a href="#refs"><span class="nav-num">✦</span> References</a></li>
   </ul>
+  <div class="nav-pages">
+    <a href="Assignment13_Japan.html">← Assignment 13</a>
+    <a href="FinalProject_Script.html">Speaker Script →</a>
+  </div>
   <div class="nav-footer">
     William Robert Schreiner Jr<br/>
     104 Principles of Macroeconomics<br/>
@@ -482,7 +543,7 @@
       </div>
       <div class="hero-meta-item">
         <label>Instructor</label>
-        <span>Youssuf Abdelatif, PhD Student</span>
+        <span>Youssuf Abdelatif</span>
       </div>
       <div class="hero-meta-item">
         <label>Term</label>
@@ -875,6 +936,25 @@
 
   const navLinks = document.querySelectorAll('nav ul li a');
   const allIds = ['top','profile','q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','refs'];
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navOverlay = document.getElementById('navOverlay');
+  const navEl = document.querySelector('nav');
+  if (navToggle) {
+    navToggle.addEventListener('click', () => {
+      navEl.classList.toggle('open');
+      navOverlay.classList.toggle('open');
+    });
+    navOverlay.addEventListener('click', () => {
+      navEl.classList.remove('open');
+      navOverlay.classList.remove('open');
+    });
+    document.querySelectorAll('nav a').forEach(a => a.addEventListener('click', () => {
+      navEl.classList.remove('open');
+      navOverlay.classList.remove('open');
+    }));
+  }
   const allSections = allIds.map(id => document.getElementById(id));
   window.addEventListener('scroll', () => {
     let current = 'top';

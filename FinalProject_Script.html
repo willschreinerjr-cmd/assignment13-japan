@@ -94,32 +94,79 @@
     margin-bottom: 10px;
     font-style: normal;
   }
-  .top-nav {
+  /* ── Sticky launch bar ── */
+  .launch-bar {
+    position: sticky;
+    top: 0;
+    margin: -40px -32px 28px;
+    padding: 13px 32px;
+    background: #111;
+    border-bottom: 2px solid #8B0000;
     display: flex;
-    gap: 12px;
-    justify-content: center;
+    align-items: center;
+    gap: 14px;
     flex-wrap: wrap;
-    margin-bottom: 28px;
+    z-index: 100;
   }
-  .top-nav a {
-    display: inline-block;
-    color: rgba(255,255,255,0.55);
-    text-decoration: none;
+  .launch-btn {
+    background: #8B0000;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 9px 20px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s;
+  }
+  .launch-btn:hover { background: #a00000; }
+  #launchStatus {
     font-size: 0.78rem;
-    border: 1px solid #444;
-    border-radius: 20px;
-    padding: 5px 16px;
-    transition: all 0.2s;
+    color: #666;
+    flex: 1;
+    min-width: 0;
   }
-  .top-nav a:hover { color: #fff; border-color: #8B0000; background: rgba(139,0,0,0.25); }
+  .launch-back {
+    color: rgba(255,255,255,0.32);
+    text-decoration: none;
+    font-size: 0.72rem;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  .launch-back:hover { color: rgba(255,255,255,0.75); }
+  /* ── Per-slide SHOW button ── */
+  .goto-btn {
+    margin-left: auto;
+    background: transparent;
+    color: #f4a261;
+    border: 1px solid #f4a261;
+    border-radius: 6px;
+    padding: 5px 14px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+  .goto-btn:hover  { background: #f4a261; color: #1a1a1a; }
+  .goto-btn:active { transform: scale(0.95); }
+  .slide.active {
+    border-left-color: #f4a261;
+    box-shadow: 0 0 0 1px rgba(244,162,97,0.18);
+  }
 </style>
 </head>
 <body>
 
-<div class="top-nav">
-  <a href="FinalProject_Japan.html">← Final Project Presentation</a>
-  <a href="Assignment13_Japan.html">← Assignment 13</a>
-  <a href="index.html">← Home</a>
+<div class="launch-bar">
+  <button class="launch-btn" onclick="launchPresentation()">&#128250; Open Presentation Window</button>
+  <span id="launchStatus">Not connected — click to open, then use ▶ SHOW on any slide</span>
+  <a href="Assignment13_Japan.html" class="launch-back">← Assignment 13</a>
 </div>
 
 <div class="doc-title">
@@ -129,10 +176,11 @@
 </div>
 
 <!-- Cover -->
-<div class="slide">
+<div class="slide" data-section="top">
   <div class="slide-header">
     <span class="slide-num">COVER</span>
     <span class="slide-title">Introduction</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>Hello everyone. My name is William Schreiner, and for my final project I will be doing a macroeconomic analysis of <span class="key">Japan</span>. Japan is a fascinating country to study because even though it is one of the most technologically advanced nations in the world, it faces some really unique economic challenges — like a shrinking population and one of the highest debt levels of any country on earth. I will walk through the country profile and then answer each of the ten questions using economic theory and real data from sources like the IMF and World Bank.</p>
@@ -140,10 +188,11 @@
 </div>
 
 <!-- Country Profile -->
-<div class="slide">
+<div class="slide" data-section="profile">
   <div class="slide-header">
     <span class="slide-num">PROFILE</span>
     <span class="slide-title">Country Profile Dashboard</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>Here is Japan's country profile. Japan's capital and largest city is <span class="key">Tokyo</span>. The population is approximately <span class="key">124 million</span> people, but that number is actually falling — the population growth rate is <span class="key">negative 0.5 percent per year</span>, which means Japan is slowly shrinking. <span class="pause">〔pause〕</span></p>
@@ -152,10 +201,11 @@
 </div>
 
 <!-- Q1 -->
-<div class="slide">
+<div class="slide" data-section="q1">
   <div class="slide-header">
     <span class="slide-num">Q1</span>
     <span class="slide-title">Real GDP per Capita</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>Question 1 asks about Japan's real GDP per capita. Using the IMF DataMapper, Japan's real GDP per capita is <span class="key">$35,700</span>. The United States, by comparison, is <span class="key">$94,430</span> — about two and a half times higher. <span class="pause">〔pause〕</span></p>
@@ -165,10 +215,11 @@
 </div>
 
 <!-- Q2 -->
-<div class="slide">
+<div class="slide" data-section="q2">
   <div class="slide-header">
     <span class="slide-num">Q2</span>
     <span class="slide-title">Main Export Good</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>Japan's main export good is <span class="key">motor vehicles</span> — cars, trucks, and automotive parts. Japan exports over <span class="key">$100 billion</span> worth of vehicles per year. <span class="pause">〔pause〕</span></p>
@@ -178,10 +229,11 @@
 </div>
 
 <!-- Q3 -->
-<div class="slide">
+<div class="slide" data-section="q3">
   <div class="slide-header">
     <span class="slide-num">Q3</span>
     <span class="slide-title">Capital Accumulation &amp; the Production Function</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>For Question 3, I need to first explain the production function and then apply it to Japan. <span class="pause">〔pause〕</span></p>
@@ -191,10 +243,11 @@
 </div>
 
 <!-- Q4 -->
-<div class="slide">
+<div class="slide" data-section="q4">
   <div class="slide-header">
     <span class="slide-num">Q4</span>
     <span class="slide-title">Institutional Quality</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>Question 4 is about institutional quality. Using the same production function from Question 3 — when institutional quality improves, like stronger rule of law, secure property rights, or a more independent court system — it <span class="key">shifts the entire production function curve upward</span>. That means for any level of capital, the country produces more output, because institutions allow capital to be used more efficiently. <span class="pause">〔pause〕</span></p>
@@ -204,10 +257,11 @@
 </div>
 
 <!-- Q5 -->
-<div class="slide">
+<div class="slide" data-section="q5">
   <div class="slide-header">
     <span class="slide-num">Q5</span>
     <span class="slide-title">Human Capital &amp; HDI</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>Question 5 is about human capital. Human capital is the knowledge, skills, and health that workers carry with them. It matters for long-run growth because more educated, healthier workers are more productive. More importantly, human capital drives <span class="key">innovation and technological progress</span>, which actually shifts the production function upward rather than just moving along it. This is why countries that invest in education and healthcare tend to see sustained long-run growth. <span class="pause">〔pause〕</span></p>
@@ -217,10 +271,11 @@
 </div>
 
 <!-- Q6 -->
-<div class="slide">
+<div class="slide" data-section="q6">
   <div class="slide-header">
     <span class="slide-num">Q6</span>
     <span class="slide-title">Monetary Policy</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>Question 6 is about monetary policy. The Federal Reserve has three goals: <span class="key">maximum employment</span>, <span class="key">stable prices</span> — targeting 2 percent inflation — and <span class="key">moderate long-term interest rates</span>. The two main goals are maximum employment and stable prices. <span class="pause">〔pause〕</span></p>
@@ -231,10 +286,11 @@
 </div>
 
 <!-- Q7 -->
-<div class="slide">
+<div class="slide" data-section="q7">
   <div class="slide-header">
     <span class="slide-num">Q7</span>
     <span class="slide-title">Fiscal Policy</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>Question 7 is about fiscal policy. The best practice is to act counter-cyclically. During a <span class="key">boom</span> — when the economy is above potential — the government should be contractionary: spend less and raise taxes to cool the economy and build up a surplus. During a <span class="key">bust</span> — when the economy is below potential — the government should be expansionary: increase spending and cut taxes to stimulate demand and support jobs. <span class="pause">〔pause〕</span></p>
@@ -244,10 +300,11 @@
 </div>
 
 <!-- Q8 -->
-<div class="slide">
+<div class="slide" data-section="q8">
   <div class="slide-header">
     <span class="slide-num">Q8</span>
     <span class="slide-title">Government Debt</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>Question 8 is about government debt. The debt-to-GDP ratio is calculated by dividing total government debt by GDP and multiplying by 100. It tells you how large the debt is relative to the size of the economy. <span class="pause">〔pause〕</span></p>
@@ -258,10 +315,11 @@
 </div>
 
 <!-- Q9 -->
-<div class="slide">
+<div class="slide" data-section="q9">
   <div class="slide-header">
     <span class="slide-num">Q9</span>
     <span class="slide-title">Unemployment</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>Question 9 is about unemployment. The natural rate of unemployment is the unemployment rate when the economy is at full employment — with no demand-driven, or cyclical, unemployment. It only includes frictional unemployment — workers between jobs — and structural unemployment — a mismatch between skills and available jobs. For the United States, the natural rate is estimated at approximately <span class="key">4 percent</span>. <span class="pause">〔pause〕</span></p>
@@ -271,10 +329,11 @@
 </div>
 
 <!-- Q10 -->
-<div class="slide">
+<div class="slide" data-section="q10">
   <div class="slide-header">
     <span class="slide-num">Q10</span>
     <span class="slide-title">Most Interesting Historical Phase</span>
+    <button class="goto-btn">▶ SHOW</button>
   </div>
   <div class="script-text">
     <p>For Question 10, the historical phase I find most interesting is Japan's <span class="key">Post-World War II Economic Miracle</span> — roughly from 1945 to 1973. <span class="pause">〔pause〕</span></p>
@@ -286,5 +345,36 @@
   <div class="note">💡 Tip: Make eye contact with the class during this section — it's the most engaging part of the presentation.</div>
 </div>
 
+<script>
+  let presentWin = null;
+
+  function launchPresentation() {
+    presentWin = window.open('FinalProject_Japan.html', 'presentation');
+    const s = document.getElementById('launchStatus');
+    s.textContent = '✓ Presentation window open — click ▶ SHOW on any slide to jump to that section';
+    s.style.color = '#4caf50';
+  }
+
+  function goTo(section) {
+    if (!presentWin || presentWin.closed) {
+      presentWin = window.open('FinalProject_Japan.html', 'presentation');
+      setTimeout(() => presentWin.postMessage({ scrollTo: section }, '*'), 2000);
+      const s = document.getElementById('launchStatus');
+      s.textContent = '✓ Opening presentation and navigating...';
+      s.style.color = '#4caf50';
+    } else {
+      presentWin.postMessage({ scrollTo: section }, '*');
+      presentWin.focus();
+    }
+  }
+
+  document.querySelectorAll('.slide[data-section]').forEach(slide => {
+    slide.querySelector('.goto-btn').addEventListener('click', () => {
+      goTo(slide.dataset.section);
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      slide.classList.add('active');
+    });
+  });
+</script>
 </body>
 </html>

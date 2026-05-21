@@ -965,6 +965,14 @@
       a.classList.toggle('active', a.getAttribute('href') === '#' + current);
     });
   });
+
+  // Accept scroll commands from the speaker script window
+  window.addEventListener('message', e => {
+    if (e.data && e.data.scrollTo) {
+      const target = document.getElementById(e.data.scrollTo);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
 </script>
 </body>
 </html>

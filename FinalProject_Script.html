@@ -156,9 +156,14 @@
   }
   .goto-btn:hover  { background: #f4a261; color: #1a1a1a; }
   .goto-btn:active { transform: scale(0.95); }
+  @keyframes slideIn {
+    from { transform: translateX(-10px); opacity: 0.5; }
+    to   { transform: translateX(0);     opacity: 1; }
+  }
   .slide.active {
     border-left-color: #f4a261;
-    box-shadow: 0 0 0 1px rgba(244,162,97,0.18);
+    box-shadow: 0 0 0 1px rgba(244,162,97,0.22);
+    animation: slideIn 0.35s ease-out;
   }
 </style>
 </head>
@@ -225,7 +230,7 @@
   <div class="script-text">
     <p>Japan's main export good is <span class="key">motor vehicles</span> — cars, trucks, and automotive parts. Japan exports over <span class="key">$100 billion</span> worth of vehicles per year. <span class="pause">〔pause〕</span></p>
     <p>The macroeconomic mechanism that drives this is <span class="key">comparative advantage</span>. A country has a comparative advantage when it can produce a good at a lower opportunity cost than other countries. Japan specializes in capital-intensive precision manufacturing because it has a massive stock of industrial capital — advanced robotics, automated assembly lines, and decades of accumulated engineering expertise. Producing vehicles is relatively cheaper for Japan in terms of what it gives up compared to other countries.</p>
-    <p>One additional reason is Japan's culture of <span class="key">kaizen</span>, which means continuous improvement. Japanese automakers invest heavily in robotics and automation, which gives them a quality and efficiency advantage that is very hard for other countries to copy quickly.</p>
+    <p>One additional reason is Japan's culture of <span class="key">kaizen</span> <span class="pause">(say: KAI-zen)</span>, which means continuous improvement. Japanese automakers invest heavily in robotics and automation, which gives them a quality and efficiency edge that is very hard for other countries to copy quickly.</p>
   </div>
 </div>
 
@@ -252,7 +257,7 @@
   </div>
   <div class="script-text">
     <p>Question 4 is about institutional quality. Using the same production function from Question 3 — when institutional quality improves, like stronger rule of law, secure property rights, or a more independent court system — it <span class="key">shifts the entire production function curve upward</span>. That means for any level of capital, the country produces more output, because institutions allow capital to be used more efficiently. <span class="pause">〔pause〕</span></p>
-    <p>According to the Liberal Political Institutions Index on Our World in Data, Japan scores approximately <span class="key">0.73 out of 1.0</span>. That places Japan well above the global average of about 0.35 and in the same range as other advanced democracies like France and Canada. Japan has a stable parliamentary democracy, an independent judiciary, strong property rights, and low corruption.</p>
+    <p>According to the Liberal Political Institutions Index on Our World in Data, Japan scores approximately <span class="key">0.73 out of 1.0</span>. That places Japan well above the global average of about 0.35 and in the same range as other advanced democracies like France and Canada. Japan has a stable democratic government, an independent court system, strong property rights, and low corruption.</p>
     <p>For long-run growth, this is a positive signal. Investors — both domestic and foreign — know their contracts will be honored and their property will be protected, which encourages continued investment and R&amp;D. The main risks for Japan are not institutional — they are demographic and structural.</p>
   </div>
 </div>
@@ -370,10 +375,19 @@
   }
 
   document.querySelectorAll('.slide[data-section]').forEach(slide => {
-    slide.querySelector('.goto-btn').addEventListener('click', () => {
+    const btn = slide.querySelector('.goto-btn');
+    btn.addEventListener('click', () => {
       goTo(slide.dataset.section);
       document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
       slide.classList.add('active');
+      btn.textContent = '✓ SHOWN';
+      btn.style.background = '#f4a261';
+      btn.style.color = '#1a1a1a';
+      setTimeout(() => {
+        btn.textContent = '▶ SHOW';
+        btn.style.background = '';
+        btn.style.color = '';
+      }, 1300);
     });
   });
 </script>

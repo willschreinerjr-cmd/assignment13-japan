@@ -427,6 +427,14 @@
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--red); }
 
+  /* ── Jump-to highlight animation (triggered by script window) ── */
+  @keyframes sectionPop {
+    0%   { box-shadow: none; }
+    18%  { box-shadow: 0 0 0 4px rgba(139,0,0,0.7), 0 0 60px rgba(139,0,0,0.2); }
+    100% { box-shadow: none; }
+  }
+  .section-banner.jump-flash { animation: sectionPop 1.6s ease-out; }
+
   /* ── Mobile hamburger toggle ── */
   .nav-toggle {
     display: none;
@@ -970,7 +978,16 @@
   window.addEventListener('message', e => {
     if (e.data && e.data.scrollTo) {
       const target = document.getElementById(e.data.scrollTo);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const banner = target.querySelector('.section-banner');
+        if (banner) {
+          banner.classList.remove('jump-flash');
+          void banner.offsetWidth; // restart animation
+          banner.classList.add('jump-flash');
+          setTimeout(() => banner.classList.remove('jump-flash'), 1700);
+        }
+      }
     }
   });
 </script>

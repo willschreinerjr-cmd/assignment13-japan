@@ -437,15 +437,15 @@
 
   /* ── Presentation focus mode (activated by speaker script) ── */
   body.pres-mode .section,
-  body.pres-mode .hero { display: none; }
+  body.pres-mode .hero { display: none !important; }
   body.pres-mode .section.focus {
-    display: block;
+    display: block !important;
     opacity: 1 !important;
     transform: none !important;
     animation: focusFade 0.4s ease-out;
   }
   body.pres-mode .hero.focus {
-    display: block;
+    display: block !important;
     animation: focusFade 0.4s ease-out;
   }
   @keyframes focusFade {

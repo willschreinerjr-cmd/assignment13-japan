@@ -440,17 +440,123 @@
   body.pres-mode .hero { display: none !important; }
   body.pres-mode .section.focus {
     display: block !important;
-    opacity: 1 !important;
-    transform: none !important;
-    animation: focusFade 0.4s ease-out;
+    animation: focusFade 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
   body.pres-mode .hero.focus {
-    display: block !important;
-    animation: focusFade 0.4s ease-out;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0 -48px !important;
+    padding: 60px 10% !important;
+    animation: focusFade 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
   @keyframes focusFade {
+    0%   { opacity: 0; transform: scale(0.97) translateY(22px); }
+    60%  { opacity: 1; transform: scale(1.004) translateY(-3px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* ── Pres-mode: stagger content blocks ── */
+  body.pres-mode .section.focus .section-banner {
+    animation: bannerSlide 0.38s 0.06s ease-out both;
+  }
+  @keyframes bannerSlide {
+    from { opacity: 0; transform: translateX(-18px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  body.pres-mode .section.focus .profile-grid {
+    animation: contentRise 0.44s 0.15s ease-out both;
+  }
+  body.pres-mode .section.focus .theory-box {
+    animation: contentRise 0.44s 0.18s ease-out both;
+  }
+  body.pres-mode .section.focus .bar-chart,
+  body.pres-mode .section.focus .compare-grid,
+  body.pres-mode .section.focus .graph-wrap,
+  body.pres-mode .section.focus .rate-timeline {
+    animation: contentRise 0.44s 0.26s ease-out both;
+  }
+  body.pres-mode .section.focus .apply-box {
+    animation: contentRise 0.44s 0.33s ease-out both;
+  }
+  @keyframes contentRise {
     from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: none; }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Animated Bar Charts ── */
+  .bar-chart {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 26px;
+    margin: 16px 0;
+  }
+  .bar-chart-title {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .bar-row:last-child { margin-bottom: 0; }
+  .bar-label { width: 200px; font-size: 0.82rem; font-weight: 600; color: var(--charcoal); flex-shrink: 0; }
+  .bar-track { flex: 1; background: #f0eded; border-radius: 20px; height: 26px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 20px; width: var(--w); }
+  .bar-fill.red-bar  { background: linear-gradient(90deg, var(--red), #c8001a); }
+  .bar-fill.blue-bar { background: linear-gradient(90deg, #1a3a6b, #2e60a8); }
+  .bar-fill.gray-bar { background: linear-gradient(90deg, #4a4a4a, #888); }
+  .bar-value { width: 72px; font-size: 0.88rem; font-weight: 700; color: var(--charcoal); text-align: right; flex-shrink: 0; }
+  /* Animate bars when focused in pres-mode */
+  body.pres-mode .section .bar-fill { width: 0 !important; }
+  body.pres-mode .section.focus .bar-fill {
+    animation: growBar 1.2s var(--bar-delay, 0.5s) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes growBar {
+    from { width: 0; }
+    to   { width: var(--w); }
+  }
+
+  /* ── BOJ Rate Timeline ── */
+  .rate-timeline {
+    display: flex;
+    margin: 16px 0;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .rate-step { flex: 1; padding: 16px 14px; border-right: 1px solid var(--border); }
+  .rate-step:last-child { border-right: none; }
+  .rate-step.current { background: #fff5f5; }
+  .rate-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--border); margin-bottom: 8px; }
+  .rate-step.current .rate-dot { background: var(--red); box-shadow: 0 0 0 4px rgba(139,0,0,0.15); }
+  .rate-date { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); margin-bottom: 3px; }
+  .rate-val { font-size: 1.4rem; font-weight: 700; color: var(--charcoal); line-height: 1.2; }
+  .rate-step.current .rate-val { color: var(--red); }
+  .rate-change { font-size: 0.72rem; color: var(--gray); margin-top: 3px; }
+  .rate-step.up .rate-change { color: #1d7a1d; }
+  /* Stagger rate steps in pres-mode */
+  body.pres-mode .section .rate-step { opacity: 0; }
+  body.pres-mode .section.focus .rate-step {
+    animation: ratePop 0.36s var(--step-delay, 0.3s) ease-out forwards;
+  }
+  @keyframes ratePop {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SVG Production Function Path Draw ── */
+  body.pres-mode .section .prod-curve { stroke-dasharray: 620; stroke-dashoffset: 620; }
+  body.pres-mode .section.focus .prod-curve {
+    animation: drawPath 1.5s 0.5s ease-in-out forwards;
+  }
+  @keyframes drawPath {
+    from { stroke-dashoffset: 620; stroke-dasharray: 620; }
+    to   { stroke-dashoffset: 0;   stroke-dasharray: 620; }
   }
 
   /* ── Mobile hamburger toggle ── */
@@ -673,6 +779,25 @@
       </div>
     </div>
 
+    <div class="bar-chart">
+      <div class="bar-chart-title">Real GDP per Capita — IMF 2026 Comparison</div>
+      <div class="bar-row">
+        <div class="bar-label">🇯🇵 Japan</div>
+        <div class="bar-track"><div class="bar-fill red-bar" style="--w:37.8%;--bar-delay:0.45s"></div></div>
+        <div class="bar-value">$35,700</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">🌍 World Average</div>
+        <div class="bar-track"><div class="bar-fill gray-bar" style="--w:16.6%;--bar-delay:0.65s"></div></div>
+        <div class="bar-value">~$15,680</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">🇺🇸 United States</div>
+        <div class="bar-track"><div class="bar-fill blue-bar" style="--w:100%;--bar-delay:0.85s"></div></div>
+        <div class="bar-value">$94,430</div>
+      </div>
+    </div>
+
     <div class="apply-box">
       <h4>Comparison &amp; Interpretation</h4>
       <p>The United States produces approximately <strong>2.6 times more output per person</strong> than Japan. While Japan is unquestionably a wealthy, advanced economy — well above the world average of ~$15,680 — this gap reflects several realities. The U.S. benefits from a larger and faster-growing workforce, more flexible labor markets, a dominant services sector, higher rates of immigration of skilled workers, and greater productivity driven by Silicon Valley-style innovation. Japan, by contrast, faces a shrinking and aging population that limits both the size of its workforce and the pace of domestic consumption, putting a ceiling on how fast output per person can grow.</p>
@@ -725,7 +850,7 @@
         <text x="10"  y="160" font-size="11" fill="#757575" transform="rotate(-90,18,160)">Output per Worker (Y)</text>
         <!-- Production function curve: Y = 90*sqrt(K/480)*260 scaled -->
         <!-- Points on curve: (0,260) → (60,180) → (120,148) → (200,122) → (300,104) → (420,90) -->
-        <path d="M 60 260 C 80 200, 120 165, 160 145 S 260 120, 360 104 S 440 93, 490 88"
+        <path class="prod-curve" d="M 60 260 C 80 200, 120 165, 160 145 S 260 120, 360 104 S 440 93, 490 88"
               stroke="#8B0000" stroke-width="2.5" fill="none"/>
         <!-- Label for curve -->
         <text x="460" y="83" font-size="11" fill="#8B0000" font-weight="600">Y = f(K)</text>
@@ -807,6 +932,33 @@
       </ul>
     </div>
 
+    <div class="rate-timeline">
+      <div class="rate-step" style="--step-delay:0.25s">
+        <div class="rate-dot"></div>
+        <div class="rate-date">Pre-2024</div>
+        <div class="rate-val">&minus;0.1%</div>
+        <div class="rate-change">Negative rate era</div>
+      </div>
+      <div class="rate-step up" style="--step-delay:0.5s">
+        <div class="rate-dot"></div>
+        <div class="rate-date">Mar 2024</div>
+        <div class="rate-val">0.00%</div>
+        <div class="rate-change">↑ Negative rate ended</div>
+      </div>
+      <div class="rate-step up" style="--step-delay:0.75s">
+        <div class="rate-dot"></div>
+        <div class="rate-date">Jul 2024</div>
+        <div class="rate-val">0.25%</div>
+        <div class="rate-change">↑ First hike</div>
+      </div>
+      <div class="rate-step current up" style="--step-delay:1.0s">
+        <div class="rate-dot"></div>
+        <div class="rate-date">Jan 2025</div>
+        <div class="rate-val">0.50%</div>
+        <div class="rate-change">↑ Current rate</div>
+      </div>
+    </div>
+
     <div class="apply-box">
       <h4>Applied to Japan</h4>
       <p><strong>1.) Japan's current unemployment rate: 2.5% &nbsp;|&nbsp; Inflation rate: 2.7%</strong></p>
@@ -853,6 +1005,25 @@
       <p style="margin-top:10px;">It is the standard measure used to assess how manageable a country's debt burden is relative to the size of its economy. A higher ratio generally indicates greater fiscal risk, though context matters — who holds the debt, at what interest rate, and in what currency all affect the real risk level.</p>
     </div>
 
+    <div class="bar-chart">
+      <div class="bar-chart-title">Government Debt as % of GDP — IMF 2024</div>
+      <div class="bar-row">
+        <div class="bar-label">🇯🇵 Japan</div>
+        <div class="bar-track"><div class="bar-fill red-bar" style="--w:85%;--bar-delay:0.45s"></div></div>
+        <div class="bar-value">255%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">🇺🇸 United States</div>
+        <div class="bar-track"><div class="bar-fill blue-bar" style="--w:41.3%;--bar-delay:0.65s"></div></div>
+        <div class="bar-value">124%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">🇪🇺 EU Average</div>
+        <div class="bar-track"><div class="bar-fill gray-bar" style="--w:28.3%;--bar-delay:0.85s"></div></div>
+        <div class="bar-value">85%</div>
+      </div>
+    </div>
+
     <div class="apply-box">
       <h4>Applied to Japan</h4>
       <p><strong>1.) Japan's government debt as a % of GDP: approximately <span class="highlight">255%</span> (IMF 2024).</strong> This is the highest debt-to-GDP ratio of any major advanced economy in the world — far above the U.S. (~124%) and the EU average (~85%). It is a striking figure by any measure.</p>
@@ -872,6 +1043,20 @@
       <h4>Theory: The Natural Rate of Unemployment</h4>
       <p>The <strong>natural rate of unemployment</strong> (also called the Non-Accelerating Inflation Rate of Unemployment, or NAIRU) is the unemployment rate that exists when the economy is at full employment — with no demand-driven (cyclical) unemployment. It consists only of <em>frictional unemployment</em> (workers between jobs) and <em>structural unemployment</em> (mismatch between skills and available jobs). The economy always has some frictional and structural unemployment as a natural result of a dynamic labor market.</p>
       <p>For the <strong>United States</strong>, the Congressional Budget Office (CBO) estimates the natural rate of unemployment at approximately <span class="highlight">4.0–4.4%</span>.</p>
+    </div>
+
+    <div class="bar-chart">
+      <div class="bar-chart-title">Unemployment Rate — Japan vs. U.S. Natural Rate</div>
+      <div class="bar-row">
+        <div class="bar-label">🇯🇵 Japan (Actual)</div>
+        <div class="bar-track"><div class="bar-fill red-bar" style="--w:41.7%;--bar-delay:0.45s"></div></div>
+        <div class="bar-value">2.5%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">🇺🇸 U.S. Natural Rate</div>
+        <div class="bar-track"><div class="bar-fill blue-bar" style="--w:66.7%;--bar-delay:0.65s"></div></div>
+        <div class="bar-value">4.0%</div>
+      </div>
     </div>
 
     <div class="apply-box">

@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Final Project — Macroeconomic Analysis: Japan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --red:      #8B0000;
+    --red-mid:  #a00000;
+    --charcoal: #2E2E2E;
+    --gray:     #757575;
+    --light:    #fdf8f8;
+    --white:    #ffffff;
+    --border:   #e8d5d5;
+    --gold:     #b8860b;
+    --nav-w:    270px;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f4eded;
+    color: var(--charcoal);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar Nav ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--nav-w);
+    height: 100vh;
+    background: var(--charcoal);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow: hidden;
+  }
+  .nav-header {
+    background: var(--red);
+    padding: 24px 22px 18px;
+    flex-shrink: 0;
+  }
+  .nav-flag { font-size: 2.4rem; line-height: 1; margin-bottom: 8px; }
+  .nav-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  .nav-title span {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 300;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-bottom: 3px;
+  }
+  nav ul { list-style: none; padding: 10px 0; flex: 1; overflow-y: auto; }
+  nav ul li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    color: rgba(255,255,255,0.70);
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+  }
+  nav ul li a:hover, nav ul li a.active {
+    color: var(--white);
+    background: rgba(139,0,0,0.25);
+    border-left-color: var(--red);
+  }
+  .nav-num {
+    background: var(--red);
+    color: var(--white);
+    font-size: 0.6rem;
+    font-weight: 700;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .nav-footer {
+    padding: 14px 20px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.35);
+    font-size: 0.68rem;
+    line-height: 1.6;
+  }
+
+  /* ── Main ── */
+  main {
+    margin-left: var(--nav-w);
+    flex: 1;
+    min-width: 0;
+    padding: 0 48px 100px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #6b0000 0%, #2c0000 100%);
+    margin: 0 -48px 52px;
+    padding: 60px 10% 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '🌸';
+    position: absolute;
+    font-size: 200px;
+    right: -10px; top: -40px;
+    opacity: 0.06;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '📊';
+    position: absolute;
+    font-size: 130px;
+    right: 70px; bottom: -30px;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.13);
+    color: rgba(255,255,255,0.9);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 3.2rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .hero h2 {
+    color: rgba(255,255,255,0.70);
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-bottom: 34px;
+  }
+  .hero-meta { display: flex; gap: 36px; flex-wrap: wrap; }
+  .hero-meta-item label {
+    display: block;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .hero-meta-item span {
+    color: var(--white);
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: 52px;
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .section.visible { opacity: 1; transform: translateY(0); }
+  .section-banner {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 26px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(139,0,0,0.15);
+  }
+  .section-num {
+    background: var(--red);
+    color: var(--white);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    width: 60px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    background: var(--charcoal);
+    color: var(--white);
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 16px 26px;
+    display: flex;
+    align-items: center;
+    flex: 1;
+  }
+
+  /* ── Country Profile Dashboard ── */
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .profile-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .profile-card:hover {
+    box-shadow: 0 6px 22px rgba(139,0,0,0.12);
+    transform: translateY(-2px);
+  }
+  .profile-card.full { grid-column: 1 / -1; }
+  .profile-card-label {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 6px;
+  }
+  .profile-card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--red);
+    line-height: 1.2;
+  }
+  .profile-card-sub {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-top: 2px;
+  }
+  .profile-card-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    line-height: 1.4;
+  }
+
+  /* ── Q&A Blocks ── */
+  .body-p {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--charcoal);
+    text-indent: 1.8em;
+    margin-bottom: 16px;
+  }
+  .body-p-notindent {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--charcoal);
+    margin-bottom: 16px;
+  }
+  .theory-box {
+    background: #f0eded;
+    border-left: 5px solid var(--red);
+    border-radius: 0 6px 6px 0;
+    padding: 18px 24px;
+    margin-bottom: 20px;
+  }
+  .theory-box h4 {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+  .theory-box p {
+    font-size: 0.97rem;
+    line-height: 1.75;
+    color: var(--charcoal);
+  }
+  .apply-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 24px;
+    margin-bottom: 20px;
+  }
+  .apply-box h4 {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    margin-bottom: 10px;
+  }
+  .apply-box p {
+    font-size: 0.97rem;
+    line-height: 1.75;
+    color: var(--charcoal);
+    margin-bottom: 10px;
+  }
+  .apply-box p:last-child { margin-bottom: 0; }
+  .numbered-list {
+    padding-left: 1.4em;
+    margin-bottom: 12px;
+  }
+  .numbered-list li {
+    font-size: 0.97rem;
+    line-height: 1.8;
+    color: var(--charcoal);
+    margin-bottom: 6px;
+  }
+  .highlight {
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  /* ── Comparison Bar ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .compare-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+  .compare-card.japan { border-top: 4px solid var(--red); }
+  .compare-card.usa   { border-top: 4px solid #1a3a6b; }
+  .compare-flag { font-size: 2rem; margin-bottom: 6px; }
+  .compare-country { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); margin-bottom: 4px; }
+  .compare-value { font-size: 2rem; font-weight: 700; color: var(--charcoal); }
+  .compare-value.japan { color: var(--red); }
+  .compare-value.usa   { color: #1a3a6b; }
+  .compare-label { font-size: 0.78rem; color: var(--gray); margin-top: 2px; }
+
+  /* ── SVG Graph ── */
+  .graph-wrap {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ── Facts Table ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+    margin-bottom: 16px;
+  }
+  thead tr { background: var(--red); }
+  thead th {
+    color: var(--white);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 13px 18px;
+    text-align: left;
+  }
+  tbody tr:nth-child(odd) td:first-child  { background: #f0eded; }
+  tbody tr:nth-child(even) td:first-child { background: #ebe5e5; }
+  tbody tr:nth-child(odd) td:last-child   { background: #f8f8f8; }
+  tbody tr:nth-child(even) td:last-child  { background: var(--white); }
+  tbody tr:hover td { background: #fde8e8 !important; }
+  tbody td {
+    padding: 13px 18px;
+    font-size: 0.94rem;
+    line-height: 1.5;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody td:first-child { font-weight: 600; color: var(--red); width: 36%; }
+  tbody td:last-child  { color: var(--charcoal); }
+
+  /* ── References ── */
+  .ref-item {
+    padding: 13px 0 13px 22px;
+    border-left: 3px solid var(--border);
+    margin-bottom: 12px;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--charcoal);
+    transition: border-color 0.2s;
+  }
+  .ref-item:hover { border-left-color: var(--red); }
+  .ref-item a { color: var(--red); text-decoration: none; }
+  .ref-item a:hover { text-decoration: underline; }
+
+  /* ── Progress Bar ── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: var(--nav-w); right: 0;
+    height: 3px;
+    background: var(--red);
+    transform-origin: left;
+    transform: scaleX(0);
+    z-index: 200;
+    transition: transform 0.1s linear;
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--red); }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<!-- ── Sidebar ── -->
+<nav>
+  <div class="nav-header">
+    <div class="nav-flag">🇯🇵</div>
+    <div class="nav-title">
+      <span>Final Project</span>
+      Macroeconomic Analysis<br/>Japan
+    </div>
+  </div>
+  <ul>
+    <li><a href="#top" class="active"><span class="nav-num">✦</span> Cover</a></li>
+    <li><a href="#profile"><span class="nav-num">◈</span> Country Profile</a></li>
+    <li><a href="#q1"><span class="nav-num">1</span> Real GDP per Capita</a></li>
+    <li><a href="#q2"><span class="nav-num">2</span> Main Export Good</a></li>
+    <li><a href="#q3"><span class="nav-num">3</span> Capital &amp; Output</a></li>
+    <li><a href="#q4"><span class="nav-num">4</span> Institutional Quality</a></li>
+    <li><a href="#q5"><span class="nav-num">5</span> Human Capital &amp; HDI</a></li>
+    <li><a href="#q6"><span class="nav-num">6</span> Monetary Policy</a></li>
+    <li><a href="#q7"><span class="nav-num">7</span> Fiscal Policy</a></li>
+    <li><a href="#q8"><span class="nav-num">8</span> Government Debt</a></li>
+    <li><a href="#q9"><span class="nav-num">9</span> Unemployment</a></li>
+    <li><a href="#q10"><span class="nav-num">10</span> Historical Phase</a></li>
+    <li><a href="#refs"><span class="nav-num">✦</span> References</a></li>
+  </ul>
+  <div class="nav-footer">
+    William Robert Schreiner Jr<br/>
+    104 Principles of Macroeconomics<br/>
+    Spring 2026
+  </div>
+</nav>
+
+<!-- ── Main ── -->
+<main>
+
+  <!-- Hero -->
+  <div class="hero" id="top">
+    <div class="hero-badge">Macroeconomics &bull; Final Project &bull; Spring 2026</div>
+    <h1>Final Project</h1>
+    <h2>Macroeconomic Analysis: Japan 🇯🇵</h2>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <label>Prepared by</label>
+        <span>William Robert Schreiner Jr</span>
+      </div>
+      <div class="hero-meta-item">
+        <label>Course</label>
+        <span>104 Principles of Macroeconomics</span>
+      </div>
+      <div class="hero-meta-item">
+        <label>Instructor</label>
+        <span>Youssuf Abdelatif, PhD Student</span>
+      </div>
+      <div class="hero-meta-item">
+        <label>Term</label>
+        <span>Spring 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Country Profile Dashboard ── -->
+  <div class="section" id="profile">
+    <div class="section-banner">
+      <div class="section-num">◈</div>
+      <div class="section-title">Country Profile Dashboard — Japan</div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="profile-card">
+        <div class="profile-card-label">Capital</div>
+        <div class="profile-card-value">Tokyo</div>
+        <div class="profile-card-sub">Seat of the Japanese government</div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-card-label">Biggest City</div>
+        <div class="profile-card-value">Tokyo</div>
+        <div class="profile-card-sub">Pop. ~13.96 million (city proper)</div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-card-label">Population</div>
+        <div class="profile-card-value">~124 Million</div>
+        <div class="profile-card-sub">World Bank 2024 estimate</div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-card-label">Population Growth Rate</div>
+        <div class="profile-card-value">&minus;0.5%</div>
+        <div class="profile-card-sub">Per year — population is declining</div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-card-label">Real GDP per Capita</div>
+        <div class="profile-card-value">$35,700</div>
+        <div class="profile-card-sub">IMF 2026 estimate (current USD)</div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-card-label">Real GDP Growth Rate</div>
+        <div class="profile-card-value">0.6%</div>
+        <div class="profile-card-sub">IMF 2025 estimate</div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-card-label">Unemployment Rate</div>
+        <div class="profile-card-value">2.5%</div>
+        <div class="profile-card-sub">Among the lowest in the world</div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-card-label">Inflation Rate</div>
+        <div class="profile-card-value">2.7%</div>
+        <div class="profile-card-sub">Slightly above the 2% target</div>
+      </div>
+      <div class="profile-card full">
+        <div class="profile-card-label">One Key Sector / Major Product</div>
+        <div class="profile-card-text">🚗 Automotive Industry — Motor Vehicles<br/>
+          <span style="font-weight:400;font-size:0.9rem;color:var(--gray);">Japan is the world's third-largest vehicle producer. Toyota, Honda, and Nissan dominate global markets. Motor vehicles consistently rank as Japan's #1 export category by value.</span>
+        </div>
+      </div>
+      <div class="profile-card full">
+        <div class="profile-card-label">One Fun Fact</div>
+        <div class="profile-card-text">🏭 Japan has over <span class="highlight">3 million vending machines</span> — the highest concentration per capita of any country in the world. You can buy everything from hot meals to umbrellas and fresh produce from them 24/7.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Q1 ── -->
+  <div class="section" id="q1">
+    <div class="section-banner">
+      <div class="section-num">1</div>
+      <div class="section-title">Real GDP per Capita — IMF Data &amp; Comparison</div>
+    </div>
+
+    <div class="theory-box">
+      <h4>The Numerical Value</h4>
+      <p>According to the IMF World Economic Outlook DataMapper, Japan's real GDP per capita in 2026 is approximately <strong>$35,700 USD</strong>. The United States' real GDP per capita for the same year is approximately <strong>$94,430 USD</strong>.</p>
+    </div>
+
+    <div class="theory-box">
+      <h4>How Real GDP per Capita Is Calculated</h4>
+      <p>Real GDP per capita is calculated by dividing a country's <strong>Real GDP</strong> (nominal GDP adjusted for inflation using a base year price index) by its total <strong>population</strong>. The formula is:</p>
+      <p style="text-align:center;margin-top:12px;font-size:1.05rem;font-weight:600;color:var(--red);">Real GDP per Capita = Real GDP &divide; Total Population</p>
+      <p style="margin-top:10px;">By adjusting for inflation, real GDP removes the distortion of rising prices and gives a true picture of how much output is being produced per person over time.</p>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card japan">
+        <div class="compare-flag">🇯🇵</div>
+        <div class="compare-country">Japan</div>
+        <div class="compare-value japan">$35,700</div>
+        <div class="compare-label">Real GDP per Capita (IMF 2026)</div>
+      </div>
+      <div class="compare-card usa">
+        <div class="compare-flag">🇺🇸</div>
+        <div class="compare-country">United States</div>
+        <div class="compare-value usa">$94,430</div>
+        <div class="compare-label">Real GDP per Capita (IMF 2026)</div>
+      </div>
+    </div>
+
+    <div class="apply-box">
+      <h4>Comparison &amp; Interpretation</h4>
+      <p>The United States produces approximately <strong>2.6 times more output per person</strong> than Japan. While Japan is unquestionably a wealthy, advanced economy — well above the world average of ~$15,680 — this gap reflects several realities. The U.S. benefits from a larger and faster-growing workforce, more flexible labor markets, a dominant services sector, higher rates of immigration of skilled workers, and greater productivity driven by Silicon Valley-style innovation. Japan, by contrast, faces a shrinking and aging population that limits both the size of its workforce and the pace of domestic consumption, putting a ceiling on how fast output per person can grow.</p>
+    </div>
+  </div>
+
+  <!-- ── Q2 ── -->
+  <div class="section" id="q2">
+    <div class="section-banner">
+      <div class="section-num">2</div>
+      <div class="section-title">Main Export Good &amp; the Macroeconomic Mechanism Behind It</div>
+    </div>
+
+    <div class="theory-box">
+      <h4>Main Export Good</h4>
+      <p>Japan's #1 export by value is <strong>motor vehicles and automotive parts</strong>. In a recent year, Japan exported over $100 billion in vehicles and auto components, making it one of the dominant forces in the global auto industry. Major Japanese automakers — Toyota, Honda, Nissan, Mazda, and Subaru — sell heavily into the U.S., European, and Southeast Asian markets.</p>
+    </div>
+
+    <div class="apply-box">
+      <h4>Macroeconomic Mechanism: Comparative Advantage</h4>
+      <p>The mechanism that drives Japan's export structure is <strong>comparative advantage</strong>. A country has a comparative advantage in producing a good when it can produce that good at a lower opportunity cost than other countries — even if it isn't the absolute cheapest producer. Japan has a strong comparative advantage in capital-intensive, precision manufacturing because of its enormous stock of industrial capital (robots, automated assembly lines, specialized factories) and decades of accumulated expertise in engineering and quality control. While countries like South Korea and Germany also produce vehicles, Japan can do so with exceptional reliability and efficiency relative to what it would have to give up to produce something else.</p>
+      <p><strong>One additional reason:</strong> Japan's culture of <em>kaizen</em> (continuous improvement) and its deep investment in robotics and automation technology give Japanese automakers a quality and cost-control edge that is difficult for other countries to replicate quickly.</p>
+    </div>
+  </div>
+
+  <!-- ── Q3 ── -->
+  <div class="section" id="q3">
+    <div class="section-banner">
+      <div class="section-num">3</div>
+      <div class="section-title">Capital Accumulation &amp; the Production Function</div>
+    </div>
+
+    <div class="theory-box">
+      <h4>Theory: How Capital Affects Output (Production Function)</h4>
+      <p>The production function shows the relationship between capital per worker (K) on the horizontal axis and output per worker (Y) on the vertical axis. The curve rises steeply at first — meaning the first units of capital added to a poor country generate large gains in output. However, the curve flattens as capital increases due to <strong>diminishing marginal returns to capital</strong>: each additional machine, factory, or piece of equipment adds a little less output than the one before it.</p>
+    </div>
+
+    <div class="graph-wrap">
+      <svg width="520" height="300" viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg" style="font-family:'Inter',sans-serif;">
+        <!-- Axes -->
+        <line x1="60" y1="260" x2="490" y2="260" stroke="#2E2E2E" stroke-width="2"/>
+        <line x1="60" y1="260" x2="60"  y2="20"  stroke="#2E2E2E" stroke-width="2"/>
+        <!-- Arrowheads -->
+        <polygon points="490,255 500,260 490,265" fill="#2E2E2E"/>
+        <polygon points="55,20 60,10 65,20" fill="#2E2E2E"/>
+        <!-- Axis labels -->
+        <text x="500" y="264" font-size="12" fill="#2E2E2E">K</text>
+        <text x="30"  y="15"  font-size="12" fill="#2E2E2E">Y</text>
+        <text x="200" y="290" font-size="11" fill="#757575">Capital per Worker (K)</text>
+        <text x="10"  y="160" font-size="11" fill="#757575" transform="rotate(-90,18,160)">Output per Worker (Y)</text>
+        <!-- Production function curve: Y = 90*sqrt(K/480)*260 scaled -->
+        <!-- Points on curve: (0,260) → (60,180) → (120,148) → (200,122) → (300,104) → (420,90) -->
+        <path d="M 60 260 C 80 200, 120 165, 160 145 S 260 120, 360 104 S 440 93, 490 88"
+              stroke="#8B0000" stroke-width="2.5" fill="none"/>
+        <!-- Label for curve -->
+        <text x="460" y="83" font-size="11" fill="#8B0000" font-weight="600">Y = f(K)</text>
+        <!-- Japan marker -->
+        <circle cx="380" cy="102" r="7" fill="#8B0000"/>
+        <line x1="380" y1="102" x2="380" y2="260" stroke="#8B0000" stroke-width="1.2" stroke-dasharray="5,4"/>
+        <text x="360" y="278" font-size="11" fill="#8B0000" font-weight="600">Japan (K*)</text>
+        <!-- Flat slope annotation -->
+        <line x1="360" y1="108" x2="420" y2="97" stroke="#b8860b" stroke-width="1.5"/>
+        <text x="390" y="90" font-size="10" fill="#b8860b">Flat slope here</text>
+        <!-- Poor country marker -->
+        <circle cx="120" cy="148" r="5" fill="#aaa"/>
+        <text x="90" y="140" font-size="10" fill="#757575">Low-K country</text>
+        <text x="88" y="152" font-size="9" fill="#757575">(steep returns)</text>
+      </svg>
+    </div>
+
+    <div class="apply-box">
+      <h4>Applied to Japan: Would More Capital Boost Output Strongly, Moderately, or Only Slightly?</h4>
+      <p>Japan's real GDP per capita of <strong>$35,700</strong> places it approximately <strong>32nd out of ~190 countries</strong> globally — firmly in the high-income, capital-rich category. This means Japan operates at the far right (flat) portion of the production function curve, as marked above. Because of diminishing marginal returns, each additional unit of capital added to Japan's already large stock delivers only a very small increase in output per worker.</p>
+      <p>Conclusion: Additional capital accumulation would boost Japan's output <span class="highlight">only slightly</span>. To meaningfully raise output per worker, Japan needs <strong>upward shifts of the production function itself</strong> — meaning improvements in technology, innovation, and total factor productivity — rather than simply investing more in physical capital.</p>
+    </div>
+  </div>
+
+  <!-- ── Q4 ── -->
+  <div class="section" id="q4">
+    <div class="section-banner">
+      <div class="section-num">4</div>
+      <div class="section-title">Institutional Quality &amp; Long-Run Growth</div>
+    </div>
+
+    <div class="theory-box">
+      <h4>Theory: How Institutional Quality Affects Output</h4>
+      <p>Using the same production function graph from Question 3, an improvement in institutional quality — such as stronger rule of law, secure property rights, independent courts, and stable democratic governance — <strong>shifts the entire production function curve upward</strong>. This means that for any given level of capital per worker, the country produces more output. Better institutions attract foreign and domestic investment, protect innovators' incentives, enforce contracts, and reduce corruption, all of which raise the efficiency with which capital is used.</p>
+    </div>
+
+    <div class="apply-box">
+      <h4>Applied to Japan: Institutional Quality Index</h4>
+      <p>According to the Liberal Political Institutions Index (Our World in Data), Japan scores approximately <strong>0.73 out of 1.0</strong>. This places Japan well above the global average of around 0.35 and is comparable to other advanced democracies such as France (~0.72) and Canada (~0.76).</p>
+      <p><strong>International comparison:</strong> Japan's score reflects its stable parliamentary democracy, independent judiciary, strong rule of law, low corruption, and well-enforced property and intellectual property rights. It ranks among the top quarter of countries worldwide.</p>
+      <p><strong>Implication for long-run growth:</strong> Japan's high institutional quality is a strong positive signal for long-run growth. Investors — both domestic and foreign — can rely on contracts being honored and property being protected, which encourages continued capital investment and R&amp;D spending. The main challenge is not institutional weakness, but rather demographic decline and the need for structural reforms in labor markets and immigration policy.</p>
+    </div>
+  </div>
+
+  <!-- ── Q5 ── -->
+  <div class="section" id="q5">
+    <div class="section-banner">
+      <div class="section-num">5</div>
+      <div class="section-title">Human Capital, HDI, &amp; Long-Run Growth Potential</div>
+    </div>
+
+    <div class="theory-box">
+      <h4>Theory: Why Human Capital Matters for Long-Run Growth</h4>
+      <p>Human capital refers to the knowledge, skills, health, and education that workers carry with them. In growth theory, human capital is treated similarly to physical capital — more of it increases output per worker. However, human capital has an added advantage: it drives <strong>innovation and technological progress</strong>, which shifts the production function upward (unlike physical capital, which moves along the curve). A more educated, healthier workforce is more productive, more adaptable to new technologies, and more capable of generating the innovations that sustain long-run growth even after physical capital accumulation slows down.</p>
+    </div>
+
+    <div class="apply-box">
+      <h4>Applied to Japan: HDI Score</h4>
+      <p>According to the UNDP Human Development Report (2022 data), Japan's <strong>Human Development Index (HDI) score is 0.920</strong>, placing it in the <em>Very High Human Development</em> category and ranking it <strong>24th out of 193 countries</strong> globally.</p>
+      <p>Japan's HDI is driven by three strong components: (1) a life expectancy of approximately 84 years — one of the highest in the world; (2) an average of 13.4 years of schooling; and (3) a GNI per capita that, while below the U.S., is still among the top tier globally.</p>
+      <p><strong>Interpretation:</strong> Japan's high human capital base means its workers are highly skilled, well-educated, and productive — especially in advanced manufacturing, robotics, and technology sectors. This supports Japan's long-run growth potential. However, Japan's aging population is gradually eroding this human capital stock. As the workforce shrinks and the average age rises, the challenge becomes replacing retirees and maintaining innovation capacity — making immigration policy and female labor force participation increasingly important policy levers.</p>
+    </div>
+  </div>
+
+  <!-- ── Q6 ── -->
+  <div class="section" id="q6">
+    <div class="section-banner">
+      <div class="section-num">6</div>
+      <div class="section-title">Monetary Policy — The Central Bank &amp; Interest Rates</div>
+    </div>
+
+    <div class="theory-box">
+      <h4>Theory: The Three Goals of the Federal Reserve &amp; the Effect of a Rate Increase</h4>
+      <p>The Federal Reserve has <strong>three stated goals</strong>: (1) <em>Maximum employment</em>, (2) <em>Stable prices</em> (targeting ~2% inflation), and (3) <em>Moderate long-term interest rates</em>. The two primary goals are maximum employment and stable prices — often called the "dual mandate."</p>
+      <p>When the Fed <strong>raises interest rates</strong>, it affects both goals:</p>
+      <ul class="numbered-list" style="margin-top:8px;">
+        <li><strong>Stable prices:</strong> Higher interest rates make borrowing more expensive for consumers and businesses. This reduces spending and investment → lowers demand in the economy → slows down inflation. A rate increase helps push inflation back toward the 2% target.</li>
+        <li><strong>Maximum employment:</strong> Because businesses invest less and consumers spend less, some companies may slow hiring or reduce their workforce. A rate increase can therefore cause a modest rise in unemployment as a side effect of cooling the economy.</li>
+      </ul>
+    </div>
+
+    <div class="apply-box">
+      <h4>Applied to Japan</h4>
+      <p><strong>1.) Japan's current unemployment rate: 2.5% &nbsp;|&nbsp; Inflation rate: 2.7%</strong></p>
+      <p><strong>2.) My recommendation:</strong> If I were the Bank of Japan, I would <span class="highlight">raise interest rates</span>. Inflation at 2.7% is slightly above the 2% target, and unemployment at 2.5% is already exceptionally low — the economy is at (or above) full employment. Raising rates would gently cool demand and bring inflation back toward target without risking a significant jump in unemployment given how tight the labor market already is.</p>
+      <p><strong>3.) What the Bank of Japan actually did:</strong> Yes, the BOJ acted consistently with this reasoning. After holding rates negative for years, the Bank of Japan ended its negative interest rate policy in <strong>March 2024</strong>, raising the policy rate to 0%. It then raised rates again to <strong>0.25% in July 2024</strong> and to <strong>0.5% in January 2025</strong> — responding to persistent above-target inflation and a historically tight labor market. This was the first sustained rate-hiking cycle in Japan in decades, and it directly mirrors the logic above.</p>
+    </div>
+  </div>
+
+  <!-- ── Q7 ── -->
+  <div class="section" id="q7">
+    <div class="section-banner">
+      <div class="section-num">7</div>
+      <div class="section-title">Fiscal Policy — Government Spending &amp; the Output Gap</div>
+    </div>
+
+    <div class="theory-box">
+      <h4>Theory: Fiscal Policy Best Practices in Booms vs. Busts</h4>
+      <p>The best practice for fiscal policy is to act <strong>counter-cyclically</strong>:</p>
+      <ul class="numbered-list" style="margin-top:8px;">
+        <li><strong>During a boom</strong> (positive output gap — economy producing above potential): The government should use <em>contractionary</em> fiscal policy — reduce spending and/or raise taxes. This cools demand, prevents overheating and runaway inflation, and builds up budget surpluses to be used later.</li>
+        <li><strong>During a bust</strong> (negative output gap — economy below potential): The government should use <em>expansionary</em> fiscal policy — increase spending and/or cut taxes to stimulate demand, support employment, and help the economy recover.</li>
+      </ul>
+    </div>
+
+    <div class="apply-box">
+      <h4>Applied to Japan</h4>
+      <p><strong>1.) Government spending as a % of GDP:</strong> Japan's general government expenditure is approximately <span class="highlight">38–40% of GDP</span> (IMF 2024). Japan also runs budget deficits of approximately 5–6% of GDP annually, meaning it spends significantly more than it collects in revenue.</p>
+      <p><strong>2.) Output gap:</strong> Japan's output gap in 2024–2025 is estimated to be approximately <span class="highlight">zero to slightly positive</span> by the IMF — meaning the economy is running close to or at its potential output level, and there is no significant slack.</p>
+      <p><strong>3.) Does Japan follow best practice?</strong> <span class="highlight">Not strictly.</span> With an output gap near zero (the economy at full potential), best practice calls for reducing spending and moving toward budget balance or surplus. However, Japan continues to run large deficits and high government spending. This deviation is partly explained by the pressure of Japan's aging population — rising pension payments, healthcare costs, and social security spending create structural expenditure that cannot easily be cut mid-cycle — but it does mean Japan is not following textbook counter-cyclical best practice.</p>
+    </div>
+  </div>
+
+  <!-- ── Q8 ── -->
+  <div class="section" id="q8">
+    <div class="section-banner">
+      <div class="section-num">8</div>
+      <div class="section-title">Government Debt — Debt-to-GDP Ratio</div>
+    </div>
+
+    <div class="theory-box">
+      <h4>Theory: How the Debt-to-GDP Ratio Is Calculated</h4>
+      <p>The <strong>debt-to-GDP ratio</strong> measures a government's total outstanding debt as a percentage of its annual economic output. It is calculated as:</p>
+      <p style="text-align:center;margin-top:12px;font-size:1.05rem;font-weight:600;color:var(--red);">Debt-to-GDP Ratio = (Total Government Debt &divide; GDP) &times; 100</p>
+      <p style="margin-top:10px;">It is the standard measure used to assess how manageable a country's debt burden is relative to the size of its economy. A higher ratio generally indicates greater fiscal risk, though context matters — who holds the debt, at what interest rate, and in what currency all affect the real risk level.</p>
+    </div>
+
+    <div class="apply-box">
+      <h4>Applied to Japan</h4>
+      <p><strong>1.) Japan's government debt as a % of GDP: approximately <span class="highlight">255%</span> (IMF 2024).</strong> This is the highest debt-to-GDP ratio of any major advanced economy in the world — far above the U.S. (~124%) and the EU average (~85%). It is a striking figure by any measure.</p>
+      <p><strong>2a.) Reason NOT to be too worried:</strong> Approximately <strong>90% of Japan's government debt is held domestically</strong> — by Japanese banks, pension funds, insurance companies, and the Bank of Japan itself. This means Japan is essentially borrowing from its own citizens and institutions. There is very little risk of a sudden foreign capital flight that could trigger a debt crisis, as has happened in other high-debt countries. Japan also issues its debt in yen, a currency it controls, which further limits the risk of a default scenario.</p>
+      <p><strong>2b.) Reason TO be worried:</strong> Japan's <strong>rapidly aging and shrinking population</strong> poses a serious long-term threat. As the workforce shrinks, tax revenue declines. At the same time, spending on pensions and healthcare automatically rises. The combination of falling revenue and rising social spending makes it increasingly difficult to stabilize or reduce the debt ratio over time, raising legitimate concerns about long-run fiscal sustainability without major reform.</p>
+    </div>
+  </div>
+
+  <!-- ── Q9 ── -->
+  <div class="section" id="q9">
+    <div class="section-banner">
+      <div class="section-num">9</div>
+      <div class="section-title">Unemployment — Natural Rate &amp; Japan's Labor Market</div>
+    </div>
+
+    <div class="theory-box">
+      <h4>Theory: The Natural Rate of Unemployment</h4>
+      <p>The <strong>natural rate of unemployment</strong> (also called the Non-Accelerating Inflation Rate of Unemployment, or NAIRU) is the unemployment rate that exists when the economy is at full employment — with no demand-driven (cyclical) unemployment. It consists only of <em>frictional unemployment</em> (workers between jobs) and <em>structural unemployment</em> (mismatch between skills and available jobs). The economy always has some frictional and structural unemployment as a natural result of a dynamic labor market.</p>
+      <p>For the <strong>United States</strong>, the Congressional Budget Office (CBO) estimates the natural rate of unemployment at approximately <span class="highlight">4.0–4.4%</span>.</p>
+    </div>
+
+    <div class="apply-box">
+      <h4>Applied to Japan</h4>
+      <p><strong>1.) Japan's current unemployment rate: <span class="highlight">2.5%</span>.</strong></p>
+      <p><strong>2.) Comparison to the U.S. benchmark of 4%:</strong> Japan's unemployment rate is <span class="highlight">1.5 percentage points below</span> the assumed natural rate. This means Japan's labor market is running even tighter than what would be expected at "full employment." This is remarkable — it suggests Japan is producing at or above its potential, with virtually no surplus labor.</p>
+      <p><strong>3.) Explanation:</strong> Since Japan is <em>below</em> the assumed natural rate, cyclical unemployment is not the issue. The explanation lies in Japan's very low levels of both <strong>frictional</strong> and <strong>structural</strong> unemployment. Japan's deeply ingrained "lifetime employment" culture — where major corporations have historically kept workers even through downturns rather than laying them off — dramatically reduces frictional unemployment (workers do not cycle between jobs as frequently as in the U.S.). Low structural unemployment reflects a strong alignment between Japan's workforce skills and the needs of its manufacturing and services economy. The result is an unemployment rate that sits well below the U.S. natural rate benchmark.</p>
+    </div>
+  </div>
+
+  <!-- ── Q10 ── -->
+  <div class="section" id="q10">
+    <div class="section-banner">
+      <div class="section-num">10</div>
+      <div class="section-title">Most Interesting Historical Phase &amp; Macro Concept</div>
+    </div>
+
+    <div class="apply-box">
+      <h4>The Japanese Economic Miracle (1945–1973)</h4>
+      <p>The historical phase I find most interesting is Japan's <strong>Post-WWII Economic Miracle</strong> — the roughly 25-year period between the end of World War II and the 1973 oil crisis during which Japan transformed from a war-devastated nation into the world's second-largest economy.</p>
+      <p>In 1945, Japan's economy was in ruins. Its cities, factories, and infrastructure had been destroyed by bombing campaigns, and its people were facing starvation. Yet by the 1960s, Japan was growing at annual GDP rates of <strong>nearly 10%</strong>, and by the early 1970s it had surpassed West Germany and France to become the world's #2 economy behind only the United States — a position it held until China overtook it in 2010.</p>
+      <p><strong>The macro concept:</strong> This historical phase is a perfect real-world demonstration of the <strong>production function and capital accumulation theory</strong> from class. Japan in 1945 had an extremely low capital stock per worker after wartime destruction. According to the production function, when a country starts with very little capital, the marginal return to each new unit of capital is enormous — the curve is steep on the left side. Japan was effectively placed back at the far-left of the production function curve by the war. Massive investment in factories, machinery, and infrastructure — funded by high household savings rates of 20–30% of income — meant each new unit of capital produced huge gains in output. This drove the extraordinary growth rates of the miracle years. As Japan's capital stock grew, it moved to the right along the curve, marginal returns diminished, and growth rates eventually slowed — exactly what the theory predicts. The miracle also involved upward shifts of the production function through technology adoption and institutional quality improvements (U.S.-backed democratic institutions, property rights, and a stable legal system), making it one of the most complete examples of growth theory in action in modern history.</p>
+    </div>
+  </div>
+
+  <!-- ── References ── -->
+  <div class="section" id="refs">
+    <div class="section-banner">
+      <div class="section-num">✦</div>
+      <div class="section-title">References</div>
+    </div>
+
+    <div class="ref-item">
+      International Monetary Fund. (2026). <em>World Economic Outlook DataMapper — GDP per capita, current prices.</em>
+      International Monetary Fund.
+      <a href="https://www.imf.org/external/datamapper/NGDPDPC@WEO/OEMDC/ADVEC/WEOWORLD" target="_blank">https://www.imf.org/external/datamapper/NGDPDPC@WEO/OEMDC/ADVEC/WEOWORLD</a>
+    </div>
+    <div class="ref-item">
+      International Monetary Fund. (2026). <em>World Economic Outlook Database — April 2026.</em>
+      International Monetary Fund.
+      <a href="https://www.imf.org/en/Publications/WEO" target="_blank">https://www.imf.org/en/Publications/WEO</a>
+    </div>
+    <div class="ref-item">
+      The World Bank. (2024). <em>World Bank Open Data — Japan.</em>
+      The World Bank Group.
+      <a href="https://data.worldbank.org/country/japan" target="_blank">https://data.worldbank.org/country/japan</a>
+    </div>
+    <div class="ref-item">
+      United Nations Development Programme. (2023). <em>Human Development Report 2023/2024 — Japan.</em>
+      UNDP.
+      <a href="https://hdr.undp.org/data-center/specific-country-data#/countries/JPN" target="_blank">https://hdr.undp.org/data-center/specific-country-data#/countries/JPN</a>
+    </div>
+    <div class="ref-item">
+      Our World in Data. (2024). <em>Liberal Political Institutions Index.</em>
+      Global Change Data Lab.
+      <a href="https://ourworldindata.org/grapher/liberal-political-institutions-index" target="_blank">https://ourworldindata.org/grapher/liberal-political-institutions-index</a>
+    </div>
+    <div class="ref-item">
+      Bank of Japan. (2025). <em>Monetary Policy Decisions — Interest Rate Announcements 2024–2025.</em>
+      Bank of Japan.
+      <a href="https://www.boj.or.jp/en/mopo/index.htm" target="_blank">https://www.boj.or.jp/en/mopo/index.htm</a>
+    </div>
+    <div class="ref-item">
+      Congressional Budget Office. (2024). <em>The Budget and Economic Outlook: 2024 to 2034.</em>
+      U.S. Congressional Budget Office.
+      <a href="https://www.cbo.gov/publication/59946" target="_blank">https://www.cbo.gov/publication/59946</a>
+    </div>
+    <div class="ref-item">
+      World Population Review. (2024). <em>HDI by Country 2024.</em>
+      <a href="https://worldpopulationreview.com/country-rankings/hdi-by-country" target="_blank">https://worldpopulationreview.com/country-rankings/hdi-by-country</a>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const bar = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    bar.style.transform = `scaleX(${pct})`;
+  });
+
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.06 });
+  sections.forEach(s => observer.observe(s));
+
+  const navLinks = document.querySelectorAll('nav ul li a');
+  const allIds = ['top','profile','q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','refs'];
+  const allSections = allIds.map(id => document.getElementById(id));
+  window.addEventListener('scroll', () => {
+    let current = 'top';
+    allSections.forEach(sec => {
+      if (sec && window.scrollY >= sec.offsetTop - 130) current = sec.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>
